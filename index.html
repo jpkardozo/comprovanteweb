@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emissor de Comprovante A4</title>
+    <link rel="stylesheet" href="./css/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        /* Ajustes do formulário de inserção de múltiplos objetos */
+        .input-group-objetos {
+            display: flex;
+            gap: 5px;
+        }
+        .input-group-objetos input {
+            flex: 1;
+        }
+        .btn-adicionar {
+            background-color: #28a745;
+            padding: 8px 12px;
+        }
+        /* Botão Limpar com cor de destaque cinza/vermelha */
+        .btn-limpar {
+            background-color: #6c757d;
+            margin-left: 5px;
+        }
+        .btn-limpar:hover {
+            background-color: #5a6268;
+        }
+        .lista-preview-objetos {
+            margin-top: 8px;
+            background: #eee;
+            padding: 8px;
+            border-radius: 4px;
+            max-height: 100px;
+            overflow-y: auto;
+            font-size: 13px;
+        }
+        .item-objeto-lista {
+            display: flex;
+            justify-content: space-between;
+            background: #fff;
+            padding: 3px 8px;
+            margin-bottom: 4px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+        .btn-remover-item {
+            color: red;
+            cursor: pointer;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="form-container" class="no-print">
+        <h2>Gerador de Comprovante de Entrega</h2>
+        
+        <div class="form-group">
+            <label>Código do Objeto:</label>
+            <div class="input-group-objetos">
+                <input type="text" id="input-objeto-unico" placeholder="Ex: ND721001915BR">
+                <button type="button" id="btn-add-objeto" class="btn-adicionar">+</button>
+            </div>
+            <div id="preview-lista-objetos" class="lista-preview-objetos" style="display: none;"></div>
+        </div>
+
+        <div class="form-group">
+            <label>CPF do Recebedor:</label>
+            <input type="text" id="input-cpf" maxlength="14" placeholder="000.000.000-00" required>
+            <span id="cpf-erro" style="color: red; display: none; font-size: 12px;">CPF Inválido!</span>
+        </div>
+
+        <div class="form-group">
+            <label>Nome do Recebedor:</label>
+            <input type="text" id="input-nome" placeholder="Nome Completo" required>
+        </div>
+
+        <div style="display: flex; gap: 5px;">
+            <button type="button" id="btn-gerar" style="flex: 1;">Gerar Comprovante</button>
+            <button type="button" id="btn-limpar" class="btn-limpar">Limpar Dados</button>
+        </div>
+        <button type="button" id="btn-imprimir" style="width: 100%; margin-top: 10px;" disabled>Imprimir (A4)</button>
+    </div>
+
+    <div id="comprovante-a5" class="print-area">
+        <div class="comprovante-wrapper">
+            
+            <div class="secao-esquerda">
+                <div class="cabecalho-bloco">COMPROVANTE ENTREGA</div>
+                <div id="coluna-objetos-qrcodes" class="grid-objetos">
+                    </div>
+            </div>
+
+            <div class="secao-direita">
+                <div class="cabecalho-bloco">DATA/HORA DA ENTREGA</div>
+                <div class="container-dados">
+                    <div class="linha-dado">
+                        <span class="label-topo">DATA/HORA:</span>
+                        <div id="txt-data-hora" class="valor-dado"></div>
+                    </div>
+                    <div class="linha-dado">
+                        <span class="label-topo">DOCUMENTO:</span>
+                        <div id="txt-cpf" class="valor-dado"></div>
+                    </div>
+                    <div class="linha-dado">
+                        <span class="label-topo">RECEBEDOR:</span>
+                        <div id="txt-nome" class="valor-dado uppercase"></div>
+                    </div>
+                    <div class="linha-dado no-border campo-assinatura">
+                        <span class="label-topo">ASSINATURA DO CLIENTE:</span>
+                        <div class="linha-pontilhada-assinatura"></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="./js/script.js"></script>
+</body>
+</html>

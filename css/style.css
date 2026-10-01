@@ -1,0 +1,243 @@
+/* ==========================================================================
+   1. CONFIGURAÇÕES GERAIS DA TELA (VISÃO DO USUÁRIO NO NAVEGADOR)
+   ========================================================================== */
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background-color: #f4f4f9; /* Cor de fundo cinza clara para o navegador */
+    color: #000;
+}
+
+/* Container do Formulário onde os dados são digitados */
+#form-container {
+    max-width: 500px;
+    margin: 0 auto 30px auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Sombra leve ao redor do painel */
+}
+
+/* Espaçamento entre os campos de texto */
+.form-group {
+    margin-bottom: 15px;
+}
+
+/* Estilo dos títulos dos campos (Labels) */
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+/* Caixa de digitação (Inputs) */
+.form-group input {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Botões do sistema (Gerar e Imprimir) */
+button {
+    padding: 10px 15px;
+    border: none;
+    background-color: #007bff; /* Azul padrão */
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+/* Estado desabilitado do botão imprimir antes de gerar o comprovante */
+button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+
+/* ==========================================================================
+   2. REESTRUTURAÇÃO DO COMPROVANTE (FLEXBOX PARA EVITAR DESALINHAMENTOS)
+   ========================================================================== */
+#comprovante-a5 {
+    display: none; /* Mantém oculto na tela até que o botão 'Gerar' seja clicado */
+    width: 100%;
+    background-color: #fff;
+    box-sizing: border-box;
+}
+
+/* Caixa principal que une a metade esquerda e direita e impede que elas se separem */
+.comprovante-wrapper {
+    display: flex;             /* Ativa o Flexbox: coloca as colunas lado a lado */
+    width: 100%;
+    border: 2px solid #000;    /* Borda externa grossa do comprovante */
+    box-sizing: border-box;
+    align-items: stretch;      /* FORÇA as duas colunas a terem exatamente a mesma altura */
+}
+
+/* Faixas pretas superiores com os títulos textuais */
+.cabecalho-bloco {
+    font-size: 14px;
+    font-weight: bold;
+    padding: 8px;
+    text-transform: uppercase;
+    text-align: center;
+    border-bottom: 1px solid #000; /* Linha preta abaixo do título */
+}
+
+/* Configuração da metade Esquerda (Área dos QR Codes) */
+.secao-esquerda {
+    width: 45%;                /* Ajustado para 45% para dar mais folga aos QR Codes lado a lado */
+    border-right: 1px solid #000; /* Linha vertical divisória central */
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Configuração da metade Direita (Área dos dados e Assinatura) */
+.secao-direita {
+    width: 55%;                /* Ajustado proporcionalmente para fechar os 100% */
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
+
+
+/* ==========================================================================
+   3. COLUNA DA ESQUERDA (SISTEMA DE GRADE DE 2 COLUNAS DE QR CODES CORRIGIDO)
+   ========================================================================== */
+.grid-objetos {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Divide a área em 2 colunas iguais lado a lado */
+    gap: 10px;                            /* Espaçamento controlado entre os blocos de QR code */
+    padding: 10px;                         /* Margem interna para os códigos não colarem nas bordas pretas */
+    box-sizing: border-box;
+    flex-grow: 1;                         /* Preenche toda a área útil vertical disponível */
+    justify-items: center;                /* ALINHAMENTO FIXADO: Centraliza horizontalmente o bloco no espaço reservado */
+    align-content: start;                 /* Alinha os itens no topo do grid, evitando espaços verticais vazios */
+}
+
+/* Regra inteligente: Se houver apenas 1 objeto, ele centraliza sozinho ocupando a largura total da esquerda */
+.grid-objetos:has(.bloco-objeto-individual:only-child) {
+    grid-template-columns: 1fr;
+}
+
+/* Caixa de cada conjunto (Texto do Código + Imagem do QR Code) */
+.bloco-objeto-individual {
+    text-align: center;
+    padding: 4px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; /* Garante que o QR Code e o texto fiquem agrupados e centrados */
+    width: 100%;             /* Faz o bloco respeitar os limites da coluna do grid */
+}
+
+/* Texto contendo o código de rastreio impresso em cima do QR Code */
+.texto-codigo-objeto {
+    font-size: 11px;          /* Leve redução para garantir que códigos longos não quebrem linha */
+    font-weight: bold;
+    margin-bottom: 4px;
+}
+
+/* Container que envolve o elemento gráfico do QR Code */
+.qrcode-box {
+    display: inline-block;
+}
+
+/* Força a imagem gerada a ficar centralizada dentro da sua respectiva coluna */
+.qrcode-box img {
+    margin: 0 auto;
+    display: block;
+}
+
+
+/* ==========================================================================
+   4. COLUNA DA DIREITA (DADOS DE ENTREGA E CAMPO DE ASSINATURA)
+   ========================================================================== */
+.container-dados {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    width: 100%;
+}
+
+/* Cada bloco de informação individual (Data, Documento, Recebedor) */
+.linha-dado {
+    border-bottom: 1px solid #000; /* Linha divisória horizontal entre os dados */
+    padding: 6px 8px;
+    min-height: 45px;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+/* Último bloco (Campo de Assinatura) */
+.campo-assinatura {
+    border-bottom: none;       /* Remove a linha preta do fundo para não cruzar a assinatura */
+    flex-grow: 1;              /* Faz este campo esticar e preencher todo o resto do papel */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Empurra o título para o topo e a linha pontilhada para a base */
+    min-height: 90px;          /* Altura mínima confortável caso haja poucos QR codes */
+}
+
+/* Texto miúdo explicativo no topo de cada campo (Ex: DOCUMENTO:) */
+.label-topo {
+    font-size: 9px;
+    font-weight: bold;
+    color: #000;
+    display: block;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+}
+
+/* Texto destacado com a informação preenchida (Ex: Nome do Cliente) */
+.valor-dado {
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    width: 100%;
+}
+
+/* Força letras maiúsculas automáticas */
+.uppercase {
+    text-transform: uppercase;
+}
+
+/* Linha tracejada onde o cliente assinará fisicamente com caneta */
+.linha-pontilhada-assinatura {
+    border-bottom: 1px dashed #000;
+    margin: auto 15px 10px 15px; /* Margens laterais para a linha não colar nas bordas pretas */
+}
+
+
+/* ==========================================================================
+   5. REGRAS DE IMPRESSÃO (ESTRUTURAÇÃO RÍGIDA - FIXADO EM 140MM)
+   ========================================================================== */
+@media print {
+    @page {
+        size: A4 portrait;       /* Configura o papel padrão como A4 em Modo Retrato */
+        margin: 2cm 1cm 1cm 1cm; /* Definição solicitada: 2cm no topo (cima), 1cm nas laterais e base */
+    }
+
+    body {
+        background-color: #fff;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* Oculta totalmente o formulário web e botões na folha de papel impressa */
+    .no-print {
+        display: none !important;
+    }
+
+    /* Controla o tamanho exato do comprovante na folha de papel */
+    #comprovante-a5 {
+        display: block !important;
+        width: 140mm;     /* AJUSTADO: Trava o tamanho do comprovante impresso em exatamente 14cm de largura */
+        position: static;
+        box-sizing: border-box;
+    }
+}
